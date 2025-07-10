@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | Abharan Jewellers</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #fdf3f3, #f7e0e0);
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+
+    .login-container {
+      background: white;
+      padding: 40px 30px;
+      border-radius: 16px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+      width: 100%;
+      max-width: 400px;
+      animation: slideUp 0.5s ease-out;
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(40px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    h2 {
+      text-align: center;
+      color: #8d1c1c;
+      margin-bottom: 25px;
+    }
+
+    .role-toggle {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .role-toggle button {
+      flex: 1;
+      padding: 12px;
+      border: 2px solid #8d1c1c;
+      background-color: transparent;
+      color: #8d1c1c;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .role-toggle button.active {
+      background-color: #8d1c1c;
+      color: #fff;
+    }
+
+    .form-section {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease, opacity 0.3s ease;
+    }
+
+    .form-section.show {
+      max-height: 500px;
+      opacity: 1;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      margin: 12px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    .password-wrapper {
+      position: relative;
+    }
+
+    .toggle-password {
+      position: absolute;
+      top: 50%;
+      right: 15px;
+      transform: translateY(-50%);
+      font-size: 14px;
+      color: #8d1c1c;
+      cursor: pointer;
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 14px;
+      margin-top: 10px;
+      background-color: #8d1c1c;
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .login-btn:hover {
+      background-color: #a12a2a;
+    }
+
+    .forgot-link {
+      display: block;
+      text-align: right;
+      font-size: 14px;
+      color: #555;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    .forgot-link:hover {
+      text-decoration: underline;
+    }
+
+    .note {
+      font-size: 13px;
+      text-align: center;
+      color: #777;
+      margin-top: 20px;
+    }
+
+    #loaderOverlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: none;
+    }
+
+    .loader-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.95);
+    }
+
+    .loader-spinner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 60px;
+      height: 60px;
+      margin: -30px 0 0 -30px;
+      border: 6px solid #8d1c1c;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .login-container {
+        padding: 30px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>Abharan Jewels Login</h2>
+
+    <div class="role-toggle">
+      <button id="adminBtn" onclick="setRole('admin')">Admin Login</button>
+      <button id="userBtn" onclick="setRole('user')">User Login</button>
+    </div>
+
+    <div class="form-section" id="formSection">
+      <input type="text" id="username" placeholder="Username" />
+
+      <div class="password-wrapper">
+        <input type="password" id="password" placeholder="Password" />
+        <span class="toggle-password" onclick="togglePassword()">👁</span>
+      </div>
+
+      <div class="forgot-link" onclick="forgotPassword()">Forgot Password?</div>
+      <button class="login-btn" onclick="login()">Login</button>
+    </div>
+
+    <div class="note">
+      <strong>Demo Credential</strong><br />
+      <b>Admin:</b> admin / admin123<br />
+      <b>User:</b> user / user123
+    </div>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div id="loaderOverlay">
+    <div class="loader-backdrop"></div>
+    <div class="loader-spinner"></div>
+  </div>
+
+  <script>
+    let selectedRole = null;
+
+    function setRole(role) {
+      selectedRole = role;
+      document.getElementById("formSection").classList.add("show");
+
+      document.getElementById("username").value = "";
+      document.getElementById("password").value = "";
+
+      document.getElementById("adminBtn").classList.remove("active");
+      document.getElementById("userBtn").classList.remove("active");
+
+      document.getElementById(role + "Btn").classList.add("active");
+    }
+
+    function login() {
+      const uname = document.getElementById("username").value.trim();
+      const pwd = document.getElementById("password").value;
+
+      if (selectedRole === "admin" && uname === "admin" && pwd === "abharan@$abj123") {
+        localStorage.setItem("role", "admin");
+        showLoaderAndRedirect();
+      } else if (selectedRole === "user" && uname === "user" && pwd === "userabj@123") {
+        localStorage.setItem("role", "user");
+        showLoaderAndRedirect();
+      } else {
+        alert("Invalid credentials!");
+      }
+    }
+
+    function showLoaderAndRedirect() {
+      document.getElementById("loaderOverlay").style.display = "block";
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 1500);
+    }
+
+    function forgotPassword() {
+      alert("Please contact the owner to reset your password.");
+    }
+
+    function togglePassword() {
+      const passInput = document.getElementById("password");
+      passInput.type = passInput.type === "password" ? "text" : "password";
+    }
+  </script>
+</body>
+</html>

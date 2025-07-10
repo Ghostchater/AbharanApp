@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Jewellery Gallery</title>
+  <link rel="stylesheet" href="css/style.css" />
+ 
+  <script>
+    // Redirect to login if not logged in
+    if (!localStorage.getItem("role")) {
+      window.location.href = "login.html";
+    }
+  </script>
+</head>
+<body>
+  <div class="mobile-frame">
+
+    <!-- App bar -->
+    <div class="app-bar">
+      <button class="menu-btn" onclick="toggleMenu()">☰</button>
+      <span class="app-title">Abharan Jewellers</span>
+    </div>
+
+    <!-- Sidebar menu -->
+    <div id="sideMenu" class="side-menu">
+      <button onclick="location.href='index.html'">🏠 Home</button>
+      <button onclick="window.scrollTo(0, 0)">🔝 Top</button>
+      <button onclick="logout()">🔒 Logout</button>
+    </div>
+
+    <!-- Main content -->
+    <div class="container">
+      <h1>Jewellery Categories</h1>
+
+      <div id="categoryGrid" class="category-grid"></div>
+
+      <!-- Admin-only tools -->
+      <div id="adminTools" class="admin-tools" style="display: none;">
+        <input type="text" id="newCategoryName" placeholder="New Category Name" />
+        <input type="file" id="newCategoryImage" accept="image/*" />
+        <button onclick="addCategory()">Add Category</button>
+      </div>
+    </div>
+
+     <!-- Bottom Navigation -->
+  <div class="bottom-nav" id="bottomNav">
+    <button onclick="window.location.href='index.html'">🏠</button>
+    <button onclick="window.location.href='gallery.html'">🖼</button>
+    <button onclick="logout()">🚪</button>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById("sideMenu");
+      menu.classList.toggle("open");
+    }
+
+    function logout() {
+      localStorage.removeItem("role");
+      window.location.href = "login.html";
+    }
+
+    
+  </script>
+</body>
+</html>

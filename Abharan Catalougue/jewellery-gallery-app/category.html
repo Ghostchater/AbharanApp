@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Category Gallery</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="app-bar">
+    <button onclick="window.history.back()">🔙 Back</button>
+    <span id="categoryTitle">Gallery</span>
+  </div>
+
+  <!-- Admin Upload Bar -->
+  <div id="uploadSection" class="admin-tools" style="display: none;">
+    <input type="file" id="imageUpload" multiple accept="image/*" />
+    <button onclick="uploadImages()">Upload</button>
+  </div>
+
+  <!-- Image Grid -->
+  <div id="imageGrid" class="image-grid"></div>
+
+  <!-- Zoom Overlay -->
+  <div id="zoomOverlay" class="zoom-overlay" style="display: none;">
+    <button class="close-btn" onclick="closeZoom()">✖</button>
+    <img id="zoomImage" />
+    <div class="zoom-controls">
+      <button onclick="prevImage()">⬅ Prev</button>
+      <button onclick="nextImage()">Next ➡</button>
+      <button onclick="downloadImage()">⬇ Download</button>
+    </div>
+  </div>
+
+  <script>
+    const currentCategory = JSON.parse(localStorage.getItem("currentCategory") || "{}");
+    const isAdmin = localStorage.getItem("role") === "admin";
+    const categoryKey = `images_${currentCategory.name}`;
+    let currentImages = JSON.parse(localStorage.getItem(categoryKey) || "[]");
+    let currentIndex = 0;
+
+    document.getElementById("categoryTitle").textContent = currentCategory.name;
+
+    if (isAdmin) {
+      document.getElementById("uploadSection").style.display = "block";
+    }
+
+    const imageGrid = document.getElementById("imageGrid");
+    const zoomImage = document.getElementById("zoomImage");
+    const zoomOverlay = document.getElementById("zoomOverlay");
+
+    function renderImages() {
+      imageGrid.innerHTML = "";
+      currentImages.forEach((src, i) => {
+        const div = document.createElement("div");
+        div.className = "category-card";
+
+        const img = document.createElement("img");
+        img.src = src;
+        img.className = "thumbnail";
+        img.onclick = () => openZoom(i);
+
+        div.appendChild(img);
+
+        if (isAdmin) {
+          const editBtn = document.createElement("button");
+          editBtn.textContent = "✍️ Edit";
+          editBtn.onclick = () => editImage(i);
+          const delBtn = document.createElement("button");
+          delBtn.textContent = "🗑️ Delete";
+          delBtn.onclick = () => deleteImage(i);
+
+          div.appendChild(editBtn);
+          div.appendChild(delBtn);
+        }
+
+        imageGrid.appendChild(div);
+      });
+    }
+
+    function uploadImages() {
+      const input = document.getElementById("imageUpload");
+      const files = Array.from(input.files);
+
+      const promises = files.map(file => {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = e => resolve(e.target.result);
+          reader.onerror = () => reject();
+          reader.readAsDataURL(file);
+        });
+      });
+
+      Promise.all(promises).then(results => {
+        currentImages = currentImages.concat(results);
+        localStorage.setItem(categoryKey, JSON.stringify(currentImages));
+        renderImages();
+      }).catch(() => alert("Upload failed"));
+    }
+
+    function openZoom(index) {
+      currentIndex = index;
+      zoomImage.src = currentImages[index];
+      zoomOverlay.style.display = "flex";
+    }
+
+    function closeZoom() {
+      zoomOverlay.style.display = "none";
+    }
+
+    function nextImage() {
+      currentIndex = (currentIndex + 1) % currentImages.length;
+      zoomImage.src = currentImages[currentIndex];
+    }
+
+    function prevImage() {
+      currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length;
+      zoomImage.src = currentImages[currentIndex];
+    }
+
+    function downloadImage() {
+      const a = document.createElement('a');
+      a.href = zoomImage.src;
+      a.download = `${currentCategory.name}_${currentIndex + 1}.jpg`;
+      a.click();
+    }
+
+    function editImage(index) {
+      const newUrl = prompt("Enter new image URL or base64:", currentImages[index]);
+      if (newUrl) {
+        currentImages[index] = newUrl;
+        localStorage.setItem(categoryKey, JSON.stringify(currentImages));
+        renderImages();
+      }
+    }
+
+    function deleteImage(index) {
+      if (confirm("Delete this image?")) {
+        currentImages.splice(index, 1);
+        localStorage.setItem(categoryKey, JSON.stringify(currentImages));
+        renderImages();
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", renderImages);
+    
+  </script>
+</body>
+</html>

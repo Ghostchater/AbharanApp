@@ -1,0 +1,21 @@
+{
+  "name": "Abharan Jewellery Gallery",
+  "short_name": "Abharan Gallery",
+  "start_url": "index.html",
+  "display": "standalone",
+  "theme_color": "#8d1c1c",
+  "background_color": "#fff8f5",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icons/web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

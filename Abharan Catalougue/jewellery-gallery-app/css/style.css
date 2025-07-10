@@ -1,0 +1,369 @@
+:root {
+  /* --- Colors (Jewelry Theme - Updated from User Input) --- */
+  --color-primary: #1a1d2e; /* Deep dark blue/almost black - sophisticated main color */
+  --color-secondary: #d4af37; /* Rich Gold - classic jewelry accent for borders/highlights */
+  --color-tertiary: #1a1d2e; /* Darker tone for side menu, matches primary for consistency */
+  --color-accent-gold: #d4af37; /* Brighter Gold - for interactive elements and highlights */
+  --color-text-light: white; /* Text on dark backgrounds */
+  --color-text-dark: #1a1d2e; /* Soft Black/Dark Grey for main text */
+  --color-background-body: #f9f5ee; /* This variable is now unused as body background is primary */
+  --color-background-frame: #fefefe; /* Pure white for inner mobile frame background - now applies to main content area */
+  --color-background-card: #fffefc; /* Very light cream for category cards */
+  --color-background-card-hover: #fef7e6; /* Slightly darker cream on card hover */
+  --color-background-bottom-nav: #1a1d2e; /* Soft neutral for bottom navigation */
+  --color-border-light: #ccc; /* Light grey for general borders */
+  --color-border-card: #d4af37; /* Soft brown/gold for category card borders */
+  --color-delete-button: #8b0000; /* A refined red for delete actions */
+  --color-delete-button-hover: #a30000; /* Darker red on delete button hover */
+  --color-side-menu-text: #fefefe; /* Light gold for side menu button text */
+  --color-side-menu-border-alpha: rgba(255, 255, 255, 0.15); /* Slightly more opaque gold border for menu items */
+  --color-side-menu-hover-alpha: rgba(255, 255, 255, 0.05); /* Slightly more visible hover for menu items */
+  --color-input-border: #ccc; /* Silver-like border for input fields */
+  --color-button-hover: #313656; /* Darker shade for general button hover */
+  --color-menu-btn: var(--color-accent-gold); /* Defined menu button color for visibility */
+  --color-app-title: var(--color-text-light); /* Defined app title color */
+  --color-bottom-nav-button-hover: var(--color-text-light); /* Defined bottom nav button hover color */
+
+
+  /* --- Spacing --- */
+  --spacing-xs: 6px;
+  --spacing-sm: 10px;
+  --spacing-md: 12px;
+  --spacing-lg: 20px;
+  --spacing-xl: 30px;
+  --spacing-xxl: 40px;
+  --spacing-xxxl: 60px; /* New larger spacing for desktop */
+
+  /* --- Border Radii --- */
+  --border-radius-sm: 6px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 10px;
+  --border-radius-xl: 12px;
+
+  /* --- Box Shadows --- */
+  --shadow-app-bar: 0 2px 8px rgba(0, 0, 0, 0.15); /* Softer app bar shadow */
+  --shadow-category-card: 0 6px 16px rgba(0, 0, 0, 0.06); /* Slightly more pronounced card shadow */
+  --shadow-bottom-nav: 0 -2px 10px rgba(0, 0, 0, 0.15); /* Softer bottom nav shadow */
+
+  /* --- Dimensions --- */
+  --app-bar-height: 70px; /* Updated from user input */
+  --side-menu-width: 200px;
+  --side-menu-top: var(--app-bar-height); /* Aligns perfectly with the bottom of the app bar */
+  --bottom-nav-height: 56px; /* Updated from user input */
+  --bottom-nav-padding-vertical: 12px; /* Updated from user input */
+  --bottom-nav-total-height: calc(var(--bottom-nav-height) + (var(--bottom-nav-padding-vertical) * 2)); /* Calculate total height with padding */
+}
+
+/* Base styles */
+body {
+  font-family: 'Segoe UI', sans-serif; /* Clean, modern font */
+  background-color: var(--color-primary); /* Set body background to match app bar/primary color */
+  margin: 0;
+  padding: 0;
+  color: var(--color-text-dark); /* Ensure text color is set */
+  min-height: 100vh; /* Ensure body takes full viewport height */
+  overflow-y: auto; /* Allow body to scroll if content exceeds viewport */
+  width: 100%; /* Ensure body takes full width */
+}
+
+/* Mobile frame container - REMOVED */
+/* .mobile-frame styles are removed */
+
+/* Side Menu */
+.side-menu {
+  position: fixed; /* Changed to fixed to stick to viewport */
+  top: var(--side-menu-top); /* Aligns with the bottom of the fixed app bar */
+  left: calc(-1 * var(--side-menu-width) - var(--spacing-lg)); /* Hides menu off-screen */
+  width: var(--side-menu-width);
+  background-color: var(--color-tertiary);
+  color: var(--color-text-light);
+  padding: var(--spacing-lg) var(--spacing-sm);
+  transition: 0.3s ease;
+  z-index: 90; /* Set a z-index to be above content but below app bar/bottom nav */
+  height: calc(100vh - var(--app-bar-height)); /* Fills remaining viewport height */
+  border-top-right-radius: var(--border-radius-xl);
+  border-bottom-right-radius: var(--border-radius-xl);
+  border-right: 2px solid var(--color-accent-gold); /* Brighter gold border */
+}
+
+.side-menu.open {
+  left: 0;
+}
+
+.side-menu button {
+  display: block;
+  width: 100%;
+  background: none;
+  color: var(--color-side-menu-text); /* Light gold text */
+  border: none;
+  text-align: left;
+  padding: var(--spacing-md);
+  font-size: 16px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--color-side-menu-border-alpha);
+  transition: background 0.2s ease;
+}
+
+.side-menu button:hover {
+  background: var(--color-side-menu-hover-alpha);
+}
+
+/* Menu toggle button */
+.menu-btn {
+  font-size: 24px;
+  background: none;
+  border: none;
+  color: var(--color-menu-btn); /* Bright gold icon */
+  cursor: pointer;
+  position: fixed; /* Changed to fixed to stick to viewport */
+  top: var(--spacing-md); /* Position relative to top of viewport */
+  left: var(--spacing-md);
+  z-index: 1001; /* High z-index to be on top */
+}
+
+/* App bar */
+.app-bar {
+  width: 100%; /* Ensure full width */
+  height: var(--app-bar-height);
+  flex-shrink: 0; /* Prevent shrinking */
+  position: fixed; /* Changed to fixed to stick to viewport */
+  top: 0;
+  left: 0; /* Ensure it starts from the left edge */
+  z-index: 100; /* High z-index */
+  background-color: var(--color-primary); /* Deep dark blue */
+  color: var(--color-text-light);
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center content (app title) horizontally */
+  font-weight: bold;
+  box-shadow: var(--shadow-app-bar);
+}
+
+.app-title {
+  font-size: 20px;
+  font-family: 'Segoe UI Semibold', Arial, Helvetica, sans-serif; /* Emphasize semibold for title */
+  letter-spacing: 1px;
+  color: var(--color-app-title); /* White for app title */
+}
+
+/* Container for main content */
+.container {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: var(--spacing-lg);
+  padding-bottom: var(--bottom-nav-total-height); /* Leaves room for fixed bottom nav */
+  margin-top: var(--app-bar-height); /* Push content below fixed app bar */
+  background-color: var(--color-background-frame); /* Now acts as the main content background */
+  min-height: calc(100vh - var(--app-bar-height) - var(--bottom-nav-total-height)); /* Ensure it fills available space */
+  max-width: 100%; /* Default max-width for mobile */
+  margin-left: auto; /* Center content horizontally */
+  margin-right: auto; /* Center content horizontally */
+}
+
+/* Headings */
+h1, h2 {
+  text-align: center;
+  color: var(--color-primary); /* Matches app bar color */
+  margin-top: var(--spacing-sm);
+}
+
+/* Category grid layout */
+.category-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-lg);
+  justify-content: center; /* Center cards within the grid */
+  margin-top: var(--spacing-xl);
+}
+
+/* Category card */
+.category-card {
+  background-color: var(--color-background-card);
+  color: var(--color-text-dark);
+  width: 100%; /* Default for mobile (single column) */
+  min-height: 180px;
+  border-radius: var(--border-radius-xl);
+  border: 2px solid var(--color-border-card); /* Soft gold/brown border */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: capitalize;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  box-shadow: var(--shadow-category-card);
+}
+
+.category-card:hover {
+  transform: scale(1.04);
+  background-color: var(--color-background-card-hover);
+}
+
+/* Delete category button */
+.delete-category-btn {
+  margin-top: var(--spacing-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: var(--color-delete-button);
+  color: var(--color-text-light);
+  border: none;
+  border-radius: var(--border-radius-sm);
+  font-size: 14px;
+  cursor: pointer;
+  width: 90%; /* Keep it at 90% width of its parent */
+  box-sizing: border-box;
+}
+
+.delete-category-btn:hover {
+  background: var(--color-delete-button-hover);
+}
+
+/* Admin tools section */
+.admin-tools {
+  text-align: center; /* Center the content within admin tools, including buttons */
+  margin-top: var(--spacing-xxl);
+}
+
+/* Buttons */
+button {
+  font-size: 16px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-primary);
+  color: var(--color-text-light);
+  border: none;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  margin-top: var(--spacing-sm);
+  transition: background 0.3s;
+}
+
+button:hover {
+  background-color: var(--color-button-hover);
+}
+
+/* Input fields */
+input[type="text"],
+input[type="file"],
+input[type="color"] {
+  width: 90%;
+  max-width: 300px;
+  font-size: 16px;
+  padding: var(--spacing-sm);
+  margin: var(--spacing-sm) auto; /* Center inputs */
+  display: block;
+  border: 1px solid var(--color-input-border); /* Silver-like border */
+  border-radius: var(--border-radius-sm);
+  background: #fffdf9; /* Light background for inputs */
+}
+
+/* Canvas */
+canvas {
+  border: 2px solid var(--color-border-light);
+  max-width: 100%;
+  height: auto;
+  margin-top: var(--spacing-lg);
+  border-radius: var(--border-radius-lg);
+}
+
+/* Bottom Navigation Bar */
+.bottom-nav {
+  height: var(--bottom-nav-height);
+  flex-shrink: 0; /* Prevent shrinking */
+  position: fixed; /* Changed to fixed to stick to viewport */
+  bottom: 0;
+  left: 0; /* Ensure it starts from the left edge */
+  width: 100%; /* Ensure full width */
+  background: var(--color-background-bottom-nav);
+  border-top: 1px solid var(--color-secondary); /* Gold border */
+  display: flex;
+  justify-content: space-around; /* Distribute buttons evenly */
+  padding: var(--bottom-nav-padding-vertical) 0;
+  box-shadow: var(--shadow-bottom-nav);
+  transition: transform 0.4s ease-in-out;
+  z-index: 100; /* High z-index */
+}
+
+.bottom-nav button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: var(--color-accent-gold); /* Gold for buttons */
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.bottom-nav button:hover {
+  color: var(--color-bottom-nav-button-hover); /* White on hover */
+}
+
+.bottom-nav.hide {
+  transform: translateY(100%);
+}
+
+/* --- Responsive Adjustments --- */
+
+/* Tablet View (min-width: 768px) */
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px; /* Constrain content width for tablets */
+    padding: var(--spacing-xxl); /* Increase padding for more spacious layout */
+  }
+
+  .category-grid {
+    gap: var(--spacing-xxl); /* Increase gap between cards */
+  }
+
+  .category-card {
+    width: calc(50% - (var(--spacing-xxl) / 2)); /* Two columns, accounting for gap */
+    min-height: 200px; /* Slightly taller cards */
+  }
+
+  h1, h2 {
+    font-size: 28px; /* Larger headings */
+    margin-top: var(--spacing-lg);
+  }
+
+  button {
+    padding: var(--spacing-md) var(--spacing-lg); /* Slightly larger buttons */
+    font-size: 18px;
+  }
+
+  input[type="text"],
+  input[type="file"],
+  input[type="color"] {
+    max-width: 400px; /* Wider input fields */
+    padding: var(--spacing-md);
+  }
+}
+
+/* Desktop View (min-width: 1024px) */
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px; /* Even wider content constraint for desktops */
+    padding: var(--spacing-xxxl); /* Even more padding */
+  }
+
+  .category-grid {
+    gap: var(--spacing-xxxl); /* Larger gap */
+  }
+
+  .category-card {
+    width: calc(33.33% - (2 * var(--spacing-xxxl) / 3)); /* Three columns */
+    min-height: 220px; /* Taller cards */
+  }
+
+  h1, h2 {
+    font-size: 32px; /* Even larger headings */
+    margin-top: var(--spacing-xl);
+  }
+
+  button {
+    padding: var(--spacing-lg) var(--spacing-xl); /* Larger buttons */
+    font-size: 20px;
+  }
+
+  input[type="text"],
+  input[type="file"],
+  input[type="color"] {
+    max-width: 500px; /* Wider input fields */
+  }
+}
